@@ -1,0 +1,184 @@
+<html>
+<head>
+<title>Гра 21</title>
+<style>
+  body {
+    font-family: Arial;
+    background: #e9ecef;
+    margin: 0;
+    padding: 0;
+  }
+
+  #game {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    padding: 15px;
+    text-align: center;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+    color: #333333;
+  }
+
+  .players {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .player, .computer {
+    width: 45%;
+  }
+
+  .name {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 5px;
+  }
+
+  .score-box {
+    background: #1E90FF;
+    color: black;
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 20px;
+    font-size: 18px;
+	width: 100px;
+	margin-left: auto;
+    margin-right: auto;
+  }
+
+  img {
+    width: 100px;
+    height: 150px;
+  }
+  
+  #round-info {
+    font-style: italic;
+    margin-top: 40px;
+    margin-bottom: -40px;
+    font-size: 15px;
+  }
+
+  #button {
+    background: #7CFC00;
+    color: black;
+	font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+	margin: -30px auto 60px auto;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  #button:hover {
+    background: #218838;
+  }
+
+  .winner {
+    font-weight: bold;
+    font-size: 22px;
+    color: #28a745;
+    margin-top: 10px;
+  }
+  
+  @media (max-width: 500px) {
+    .players {
+      flex-direction: column;
+      gap: 15px;
+    }
+    .player, .computer {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+
+<body>
+<div id="game">
+  <div id="round-info"></div>
+
+  <div class="players">
+    <div class="player">
+      <div class="name" id="player-name">Гравець</div>
+      <div class="score-box" id="player-score">0</div>
+      <img id="player-card" src="zvorotnya_karta.jpg" alt="карта гравця">
+    </div>
+  
+     <button id="button">Згенерувати</button>
+  
+    <div class="computer">
+      <div class="name">Комп'ютер</div>
+      <div class="score-box" id="computer-score">0</div>
+      <img id="computer-card" src="zvorotnya_karta.jpg" alt="карта комп’ютера">
+    </div>
+  </div>
+    
+  <div class="winner" id="winner"></div>
+</div>
+
+<script>
+const cardDeck = [
+  {name: '6', value: 6, img: 'images/karta_6.jpg'},
+  {name: '7', value: 7, img: 'images/karta_7.jpg'},
+  {name: '8', value: 8, img: 'images/karta_8.jpg'},
+  {name: '9', value: 9, img: 'images/karta_9.jpg'},
+  {name: '10', value: 10, img: 'images/karta_10.jpg'},
+  {name: 'Валет', value: 2, img: 'images/karta_valet.jpg'},
+  {name: 'Дама', value: 3, img: 'images/karta_dama.jpg'},
+  {name: 'Король', value: 4, img: 'images/karta_korol.jpg'},
+  {name: 'Туз', value: 11, img: 'images/karta_tuz.jpg'}
+];
+
+let playerName = '';
+while (!playerName || playerName.trim() === '' || playerName.trim().length < 2) {
+  playerName = prompt("Введіть ваше ім'я:");
+}
+document.getElementById('player-name').innerText = playerName;
+
+let playerScore = 0;
+let computerScore = 0;
+let rounds = 0;
+const totalRounds = 3;
+
+function drawCard() {
+  const index = Math.floor(Math.random() * cardDeck.length);
+  return cardDeck[index];
+}
+
+document.getElementById('button').addEventListener('click', function() {
+  if (rounds >= 3) return;
+
+  const playerCard = drawCard();
+  const computerCard = drawCard();
+
+  document.getElementById('player-card').src = playerCard.img;
+  document.getElementById('computer-card').src = computerCard.img;
+
+  playerScore += playerCard.value;
+  computerScore += computerCard.value;
+
+  document.getElementById('player-score').innerText = playerScore;
+  document.getElementById('computer-score').innerText = computerScore;
+
+  rounds++;
+  
+  document.getElementById('round-info').innerText = `Спроба ${rounds} з ${totalRounds}`;
+
+  if (rounds === 3) {
+    let result = '';
+    if (playerScore > computerScore) result = `Переможець: ${playerName}`;
+    else result = `Переміг Комп'ютер`;
+    document.getElementById('winner').innerText = result;
+  }
+});
+</script>
+</body>
+</html>
